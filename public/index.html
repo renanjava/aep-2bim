@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plataforma de Inovação</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Plataforma de Inovação</h1>
+      <button id="filterButton">Filtrar Projetos</button>
+    </header>
+    <main>
+      <section>
+        <h2>Usuários</h2>
+        <form id="userForm" onsubmit="addUser(event)">
+          <input type="text" name="name" id="userName" required placeholder="Nome do usuário" />
+          <input type="email" name="email" id="userEmail" required placeholder="Email do usuário" />
+          <input type="password" name="password" id="userPassword" required placeholder="Senha do usuário" />
+          <button type="submit">Salvar Usuário</button>
+        </form>
+        <ul id="userList"></ul>
+      </section>
+      
+      <section>
+        <h2>Projetos</h2>
+        <form id="projectForm" onsubmit="addProject(event)">
+          <input type="text" name="title" id="projectTitle" required placeholder="Título do projeto" />
+          <textarea name="description" id="projectDescription" required placeholder="Descrição do projeto"></textarea>
+          <input type="number" name="userId" id="projectUserId" required placeholder="ID do usuário" />
+          <button type="submit">Salvar Projeto</button>
+        </form>
+        <ul id="projectList"></ul>
+      </section>
+
+      <section>
+        <h2>Parcerias</h2>
+        <form id="partnershipForm" onsubmit="addPartnership(event)">
+          <input type="number" name="projectId" id="partnershipProjectId" required placeholder="ID do projeto" />
+          <input type="number" name="partnerId" id="partnershipPartnerId" required placeholder="ID do parceiro" />
+          <button type="submit">Salvar Parceria</button>
+        </form>
+        <ul id="partnershipList"></ul>
+      </section>
+      
+      <section>
+        <h2>Financiamentos</h2>
+        <form id="fundingForm" onsubmit="addFunding(event)">
+          <input type="text" name="title" id="fundingTitle" required placeholder="Título do financiamento" />
+          <textarea name="description" id="fundingDescription" required placeholder="Descrição do financiamento"></textarea>
+          <input type="number" name="amount" id="fundingAmount" required placeholder="Valor do financiamento" />
+          <input type="date" name="deadline" id="fundingDeadline" required placeholder="Data limite do financiamento" />
+          <button type="submit">Salvar Financiamento</button>
+        </form>
+        <ul id="fundingList"></ul>
+      </section>
+
+      <section>
+        <h2>Recursos Educacionais</h2>
+        <form id="educationForm" onsubmit="addEducation(event)">
+          <input type="text" name="title" id="educationTitle" required placeholder="Título do recurso" />
+          <textarea name="description" id="educationDescription" required placeholder="Descrição do recurso"></textarea>
+          <input type="url" name="url" id="educationUrl" required placeholder="URL do recurso" />
+          <button type="submit">Salvar Recurso</button>
+        </form>
+        <ul id="educationList"></ul>
+      </section>
+    </main>
+    <footer>&copy; 2024 Plataforma de Inovação</footer>
+  </div>
+
+  <script src="./index.js"></script>
+</body>
+</html>
