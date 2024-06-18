@@ -19,7 +19,6 @@ export class PartnershipService {
         }
 
         const queryRaw: Array<Prisma.PartnershipWhereInput> = [];
-        // Adicione filtros específicos conforme necessário
         const query = mergeObjects(queryRaw);
 
         const partnerships = await this.partnershipRepository.findAll(query);

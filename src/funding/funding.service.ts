@@ -19,7 +19,6 @@ export class FundingService {
         }
 
         const queryRaw: Array<Prisma.FundingWhereInput> = [];
-        // Adicione filtros específicos conforme necessário
         const query = mergeObjects(queryRaw);
 
         const fundings = await this.fundingRepository.findAll(query);

@@ -1,4 +1,4 @@
 export interface PartnershipQueryParams {
-  projectId?: string;
-  partnerId?: string;
+  projectId?: number;
+  partnerId?: number;
 }

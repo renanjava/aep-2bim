@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { asyncErrorHandler } from "../common/middlewares/async-error-handler.middleware";
 import { UserController, UserRepository, UserService } from "./index";
-import { CreateUserDto, UpdateUserDto } from "./dto";
 
 const userController = new UserController(
     new UserService(new UserRepository()),
@@ -110,7 +109,7 @@ userRoutes.get(
  *               $ref: '#/components/schemas/ReturnUser'
  */
 userRoutes.get(
-    "/users/id/:id",
+    "/users/:id",
     asyncErrorHandler(async (req: Request, res: Response) => {
         await userController.findOne(req, res);
     }),
@@ -118,7 +117,7 @@ userRoutes.get(
 
 /**
  * @swagger
- * /users/id/{id}:
+ * /users/{id}:
  *   patch:
  *     summary: Atualiza um usuário existente pelo ID
  *     tags: [Users]
@@ -146,7 +145,7 @@ userRoutes.get(
  *               $ref: '#/components/schemas/ReturnUser'
  */
 userRoutes.patch(
-    "/users/id/:id",
+    "/users/:id",
     asyncErrorHandler(async (req: Request, res: Response) => {
         await userController.update(req, res);
     }),
@@ -172,7 +171,7 @@ userRoutes.patch(
  *         description: Usuário excluído com sucesso
  */
 userRoutes.delete(
-    "/users/id/:id",
+    "/users/:id",
     asyncErrorHandler(async (req: Request, res: Response) => {
         await userController.remove(req, res);
     }),

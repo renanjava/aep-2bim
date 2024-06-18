@@ -1,519 +1,279 @@
 const apiUrl = 'http://localhost:3000';
 
-// Função para adicionar um novo usuário
-async function addUser(event) {
-  event.preventDefault();
-  const form = document.querySelector('#userForm');
-  const formData = new FormData(form);
-
-  const userName = formData.get('name');
-  const userEmail = formData.get('email');
-  const userPassword = formData.get('password');
-
-  try {
-    const response = await fetch(`${apiUrl}/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: userName,
-        email: userEmail,
-        password: userPassword,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao adicionar usuário');
-    }
-
-    form.reset();
-    loadUsers();
-  } catch (error) {
-    console.error('Erro:', error);
-  }
-}
-
-// Função para carregar os usuários
 async function loadUsers() {
   const response = await fetch(`${apiUrl}/users`);
   const users = await response.json();
   const userList = document.querySelector('#userList');
-  userList.innerHTML = users
-    .map((user) => `
-          <li>
-            <div>
-              <h2>${user.name}</h2>
-              <p>${user.email}</p>
-              <button onclick="editUser('${user.id}', '${user.name}', '${user.email}')">Editar</button>
-              <button onclick="deleteUser('${user.id}')">Excluir</button>
-            </div>
-          </li>
-        `)
-    .join('');
+  userList.innerHTML = users.map(user => `
+    <li>
+      <div>
+        <h2>${user.name}</h2>
+        <p>${user.email}</p>
+        <button title="Editar usuário" onclick="openEditUserDialog(${user.id}, '${user.name}', '${user.email}')" style="margin-right: 3px;">✏️</button>
+        <button title="Excluir usuário" onclick="deleteUser(${user.id})" style="margin-left: 3px;">❌</button>
+      </div>
+    </li>`).join('');
 }
 
-// Função para editar um usuário
-async function editUser(id, name, email) {
-  const newName = prompt("Novo nome:", name);
-  const newEmail = prompt("Novo email:", email);
-
-  if (newName !== null && newEmail !== null) {
-    try {
-      const response = await fetch(`${apiUrl}/users/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: newName,
-          email: newEmail,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao editar usuário');
-      }
-
-      loadUsers();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para excluir um usuário
-async function deleteUser(id) {
-  if (confirm('Tem certeza que deseja excluir este usuário?')) {
-    try {
-      const response = await fetch(`${apiUrl}/users/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir usuário');
-      }
-
-      loadUsers();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para carregar os projetos
 async function loadProjects() {
   const response = await fetch(`${apiUrl}/projects`);
   const projects = await response.json();
   const projectList = document.querySelector('#projectList');
-  projectList.innerHTML = projects
-    .map((project) => `
-          <li>
-            <div>
-              <h2>${project.title}</h2>
-              <p>${project.description}</p>
-              <p>ID do Usuário: ${project.userId}</p>
-              <button onclick="editProject('${project.id}', '${project.title}', '${project.description}', '${project.userId}')">Editar</button>
-              <button onclick="deleteProject('${project.id}')">Excluir</button>
-            </div>
-          </li>
-        `)
-    .join('');
+  projectList.innerHTML = projects.map(project => `
+    <li>
+      <div>
+        <h2>${project.title}</h2>
+        <p>${project.description}</p>
+        <p>ID do Usuário: ${project.userId}</p>
+        <button title="Editar projeto" onclick="openEditProjectDialog(${project.id}, '${project.title}', '${project.description}', '${project.userId}')" style="margin-right: 3px;">✏️</button>
+        <button title="Excluir projeto" onclick="deleteProject(${project.id})" style="margin-left: 3px;">❌</button>
+      </div>
+    </li>`).join('');
 }
 
-// Função para adicionar um novo projeto
-async function addProject(event) {
-  event.preventDefault();
-  const form = document.querySelector('#projectForm');
-  const formData = new FormData(form);
-
-  const projectTitle = formData.get('title');
-  const projectDescription = formData.get('description');
-  const projectUserId = formData.get('userId');
-
-  try {
-    const response = await fetch(`${apiUrl}/projects`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: projectTitle,
-        description: projectDescription,
-        userId: projectUserId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao adicionar projeto');
-    }
-
-    form.reset();
-    loadProjects();
-  } catch (error) {
-    console.error('Erro:', error);
-  }
-}
-
-// Função para editar um projeto
-async function editProject(id, title, description, userId) {
-  const newTitle = prompt("Novo título:", title);
-  const newDescription = prompt("Nova descrição:", description);
-  const newUserId = prompt("Novo ID do usuário:", userId);
-
-  if (newTitle !== null && newDescription !== null && newUserId !== null) {
-    try {
-      const response = await fetch(`${apiUrl}/projects/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: newTitle,
-          description: newDescription,
-          userId: newUserId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao editar projeto');
-      }
-
-      loadProjects();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para excluir um projeto
-async function deleteProject(id) {
-  if (confirm('Tem certeza que deseja excluir este projeto?')) {
-    try {
-      const response = await fetch(`${apiUrl}/projects/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir projeto');
-      }
-
-      loadProjects();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para carregar as parcerias
 async function loadPartnerships() {
   const response = await fetch(`${apiUrl}/partnerships`);
   const partnerships = await response.json();
   const partnershipList = document.querySelector('#partnershipList');
-  partnershipList.innerHTML = partnerships
-    .map((partnership) => `
-          <li>
-            <div>
-              <h2>Projeto ID: ${partnership.projectId}</h2>
-              <p>Parceiro ID: ${partnership.partnerId}</p>
-              <button onclick="editPartnership('${partnership.id}', '${partnership.projectId}', '${partnership.partnerId}')">Editar</button>
-              <button onclick="deletePartnership('${partnership.id}')">Excluir</button>
-            </div>
-          </li>
-        `)
-    .join('');
+  partnershipList.innerHTML = partnerships.map(partnership => `
+    <li>
+      <div>
+        <h2>Projeto ID: ${partnership.projectId}</h2>
+        <p>Parceiro ID: ${partnership.partnerId}</p>
+        <button title="Editar parceria" onclick="openEditPartnershipDialog(${partnership.id}, '${partnership.projectId}', '${partnership.partnerId}')" style="margin-right: 3px;">✏️</button>
+        <button title="Excluir parceria" onclick="deletePartnership(${partnership.id})" style="margin-left: 3px;">❌</button>
+      </div>
+    </li>`).join('');
 }
 
-// Função para adicionar uma nova parceria
-async function addPartnership(event) {
-  event.preventDefault();
-  const form = document.querySelector('#partnershipForm');
-  const formData = new FormData(form);
-
-  const projectId = formData.get('projectId');
-  const partnerId = formData.get('partnerId');
-
-  try {
-    const response = await fetch(`${apiUrl}/partnerships`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        projectId: projectId,
-        partnerId: partnerId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao adicionar parceria');
-    }
-
-    form.reset();
-    loadPartnerships();
-  } catch (error) {
-    console.error('Erro:', error);
-  }
-}
-
-// Função para editar uma parceria
-async function editPartnership(id, projectId, partnerId) {
-  const newProjectId = prompt("Novo ID do projeto:", projectId);
-  const newPartnerId = prompt("Novo ID do parceiro:", partnerId);
-
-  if (newProjectId !== null && newPartnerId !== null) {
-    try {
-      const response = await fetch(`${apiUrl}/partnerships/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          projectId: newProjectId,
-          partnerId: newPartnerId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao editar parceria');
-      }
-
-      loadPartnerships();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para excluir uma parceria
-async function deletePartnership(id) {
-  if (confirm('Tem certeza que deseja excluir esta parceria?')) {
-    try {
-      const response = await fetch(`${apiUrl}/partnerships/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir parceria');
-      }
-
-      loadPartnerships();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para carregar os financiamentos
 async function loadFundings() {
   const response = await fetch(`${apiUrl}/fundings`);
   const fundings = await response.json();
   const fundingList = document.querySelector('#fundingList');
-  fundingList.innerHTML = fundings
-    .map((funding) => `
-          <li>
-            <div>
-              <h2>${funding.title}</h2>
-              <p>${funding.description}</p>
-              <p>Valor: ${funding.amount}</p>
-              <p>Data Limite: ${funding.deadline}</p>
-              <button onclick="editFunding('${funding.id}', '${funding.title}', '${funding.description}', '${funding.amount}', '${funding.deadline}')">Editar</button>
-              <button onclick="deleteFunding('${funding.id}')">Excluir</button>
-            </div>
-          </li>
-        `)
-    .join('');
+  fundingList.innerHTML = fundings.map(funding => `
+    <li>
+      <div>
+        <h2>${funding.title}</h2>
+        <p>${funding.description}</p>
+        <p>Valor: ${funding.amount}</p>
+        <p>Data Limite: ${funding.deadline}</p>
+        <button title="Editar financiamento" onclick="openEditFundingDialog(${funding.id}, '${funding.title}', '${funding.description}', '${funding.amount}', '${funding.deadline}')" style="margin-right: 3px;">✏️</button>
+        <button title="Excluir financiamento" onclick="deleteFunding(${funding.id})" style="margin-left: 3px;">❌</button>
+      </div>
+    </li>`).join('');
 }
 
-// Função para adicionar um novo financiamento
-async function addFunding(event) {
-  event.preventDefault();
-  const form = document.querySelector('#fundingForm');
-  const formData = new FormData(form);
-
-  const fundingTitle = formData.get('title');
-  const fundingDescription = formData.get('description');
-  const fundingAmount = formData.get('amount');
-  const fundingDeadline = formData.get('deadline');
-
-  try {
-    const response = await fetch(`${apiUrl}/fundings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: fundingTitle,
-        description: fundingDescription,
-        amount: fundingAmount,
-        deadline: fundingDeadline,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao adicionar financiamento');
-    }
-
-    form.reset();
-    loadFundings();
-  } catch (error) {
-    console.error('Erro:', error);
-  }
-}
-
-// Função para editar um financiamento
-async function editFunding(id, title, description, amount, deadline) {
-  const newTitle = prompt("Novo título:", title);
-  const newDescription = prompt("Nova descrição:", description);
-  const newAmount = prompt("Novo valor:", amount);
-  const newDeadline = prompt("Nova data limite:", deadline);
-
-  if (newTitle !== null && newDescription !== null && newAmount !== null && newDeadline !== null) {
-    try {
-      const response = await fetch(`${apiUrl}/fundings/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: newTitle,
-          description: newDescription,
-          amount: newAmount,
-          deadline: newDeadline,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao editar financiamento');
-      }
-
-      loadFundings();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para excluir um financiamento
-async function deleteFunding(id) {
-  if (confirm('Tem certeza que deseja excluir este financiamento?')) {
-    try {
-      const response = await fetch(`${apiUrl}/fundings/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir financiamento');
-      }
-
-      loadFundings();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
-  }
-}
-
-// Função para carregar os recursos educacionais
 async function loadEducation() {
   const response = await fetch(`${apiUrl}/educations`);
   const education = await response.json();
   const educationList = document.querySelector('#educationList');
-  educationList.innerHTML = education
-    .map((resource) => `
-          <li>
-            <div>
-              <h2>${resource.title}</h2>
-              <p>${resource.description}</p>
-              <a href="${resource.url}" target="_blank">Acessar Recurso</a>
-              <button onclick="editEducation('${resource.id}', '${resource.title}', '${resource.description}', '${resource.url}')">Editar</button>
-              <button onclick="deleteEducation('${resource.id}')">Excluir</button>
-            </div>
-          </li>
-        `)
-    .join('');
+  educationList.innerHTML = education.map(resource => `
+    <li>
+      <div>
+        <h2>${resource.title}</h2>
+        <p>${resource.description}</p>
+        <a href="${resource.url}" target="_blank">Acessar Recurso</a>
+        <button title="Editar recurso educacional" onclick="openEditEducationDialog(${resource.id}, '${resource.title}', '${resource.description}', '${resource.url}')" style="margin-right: 3px;">✏️</button>
+        <button title="Excluir recurso educacional" onclick="deleteEducation(${resource.id})" style="margin-left: 3px;">❌</button>
+      </div>
+    </li>`).join('');
 }
 
-// Função para adicionar um novo recurso educacional
-async function addEducation(event) {
+function openEditUserDialog(id, name, email) {
+  document.querySelector('#editUserId').value = id;
+  document.querySelector('#editUserName').value = name;
+  document.querySelector('#editUserEmail').value = email;
+  document.querySelector('#editUserDialog').showModal();
+}
+
+function openEditProjectDialog(id, title, description, userId) {
+  document.querySelector('#editProjectId').value = id;
+  document.querySelector('#editProjectTitle').value = title;
+  document.querySelector('#editProjectDescription').value = description;
+  document.querySelector('#editProjectUserId').value = userId;
+  document.querySelector('#editProjectDialog').showModal();
+}
+
+function openEditPartnershipDialog(id, projectId, partnerId) {
+  document.querySelector('#editPartnershipId').value = id;
+  document.querySelector('#editPartnershipProjectId').value = projectId;
+  document.querySelector('#editPartnershipPartnerId').value = partnerId;
+  document.querySelector('#editPartnershipDialog').showModal();
+}
+
+function openEditFundingDialog(id, title, description, amount, deadline) {
+  document.querySelector('#editFundingId').value = id;
+  document.querySelector('#editFundingTitle').value = title;
+  document.querySelector('#editFundingDescription').value = description;
+  document.querySelector('#editFundingAmount').value = amount;
+  document.querySelector('#editFundingDeadline').value = deadline;
+  document.querySelector('#editFundingDialog').showModal();
+}
+
+function openEditEducationDialog(id, title, description, url) {
+  document.querySelector('#editEducationId').value = id;
+  document.querySelector('#editEducationTitle').value = title;
+  document.querySelector('#editEducationDescription').value = description;
+  document.querySelector('#editEducationUrl').value = url;
+  document.querySelector('#editEducationDialog').showModal();
+}
+
+function closeEditUserDialog() {
+  document.querySelector('#editUserDialog').close();
+}
+
+function closeEditProjectDialog() {
+  document.querySelector('#editProjectDialog').close();
+}
+
+function closeEditPartnershipDialog() {
+  document.querySelector('#editPartnershipDialog').close();
+}
+
+function closeEditFundingDialog() {
+  document.querySelector('#editFundingDialog').close();
+}
+
+function closeEditEducationDialog() {
+  document.querySelector('#editEducationDialog').close();
+}
+
+async function updateUser(event) {
   event.preventDefault();
-  const form = document.querySelector('#educationForm');
-  const formData = new FormData(form);
+  const id = document.querySelector('#editUserId').value;
+  const name = document.querySelector('#editUserName').value;
+  const email = document.querySelector('#editUserEmail').value;
 
-  const educationTitle = formData.get('title');
-  const educationDescription = formData.get('description');
-  const educationUrl = formData.get('url');
+  await fetch(`${apiUrl}/users/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email }),
+  });
 
-  try {
-    const response = await fetch(`${apiUrl}/educations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: educationTitle,
-        description: educationDescription,
-        url: educationUrl,
-      }),
+  closeEditUserDialog();
+  loadUsers();
+}
+
+async function updateProject(event) {
+  event.preventDefault();
+  const id = document.querySelector('#editProjectId').value;
+  const title = document.querySelector('#editProjectTitle').value;
+  const description = document.querySelector('#editProjectDescription').value;
+  const userId = document.querySelector('#editProjectUserId').value;
+
+  await fetch(`${apiUrl}/projects/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ title, description, userId }),
+  });
+
+  closeEditProjectDialog();
+  loadProjects();
+}
+
+async function updatePartnership(event) {
+  event.preventDefault();
+  const id = document.querySelector('#editPartnershipId').value;
+  const projectId = document.querySelector('#editPartnershipProjectId').value;
+  const partnerId = document.querySelector('#editPartnershipPartnerId').value;
+
+  await fetch(`${apiUrl}/partnerships/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ projectId, partnerId }),
+  });
+
+  closeEditPartnershipDialog();
+  loadPartnerships();
+}
+
+async function updateFunding(event) {
+  event.preventDefault();
+  const id = document.querySelector('#editFundingId').value;
+  const title = document.querySelector('#editFundingTitle').value;
+  const description = document.querySelector('#editFundingDescription').value;
+  const amount = document.querySelector('#editFundingAmount').value;
+  const deadline = document.querySelector('#editFundingDeadline').value;
+
+  await fetch(`${apiUrl}/fundings/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ title, description, amount, deadline }),
+  });
+
+  closeEditFundingDialog();
+  loadFundings();
+}
+
+async function updateEducation(event) {
+  event.preventDefault();
+  const id = document.querySelector('#editEducationId').value;
+  const title = document.querySelector('#editEducationTitle').value;
+  const description = document.querySelector('#editEducationDescription').value;
+  const url = document.querySelector('#editEducationUrl').value;
+
+  await fetch(`${apiUrl}/educations/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ title, description, url }),
+  });
+
+  closeEditEducationDialog();
+  loadEducation();
+}
+
+async function deleteUser(id) {
+  if (confirm('Tem certeza que deseja excluir este usuário?')) {
+    await fetch(`${apiUrl}/users/${id}`, {
+      method: 'DELETE',
     });
-
-    if (!response.ok) {
-      throw new Error('Erro ao adicionar recurso educacional');
-    }
-
-    form.reset();
-    loadEducation();
-  } catch (error) {
-    console.error('Erro:', error);
+    loadUsers();
   }
 }
 
-// Função para editar um recurso educacional
-async function editEducation(id, title, description, url) {
-  const newTitle = prompt("Novo título:", title);
-  const newDescription = prompt("Nova descrição:", description);
-  const newUrl = prompt("Novo URL:", url);
-
-  if (newTitle !== null && newDescription !== null && newUrl !== null) {
-    try {
-      const response = await fetch(`${apiUrl}/educations/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: newTitle,
-          description: newDescription,
-          url: newUrl,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao editar recurso educacional');
-      }
-
-      loadEducation();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
+async function deleteProject(id) {
+  if (confirm('Tem certeza que deseja excluir este projeto?')) {
+    await fetch(`${apiUrl}/projects/${id}`, {
+      method: 'DELETE',
+    });
+    loadProjects();
   }
 }
 
-// Função para excluir um recurso educacional
+async function deletePartnership(id) {
+  if (confirm('Tem certeza que deseja excluir esta parceria?')) {
+    await fetch(`${apiUrl}/partnerships/${id}`, {
+      method: 'DELETE',
+    });
+    loadPartnerships();
+  }
+}
+
+async function deleteFunding(id) {
+  if (confirm('Tem certeza que deseja excluir este financiamento?')) {
+    await fetch(`${apiUrl}/fundings/${id}`, {
+      method: 'DELETE',
+    });
+    loadFundings();
+  }
+}
+
 async function deleteEducation(id) {
   if (confirm('Tem certeza que deseja excluir este recurso educacional?')) {
-    try {
-      const response = await fetch(`${apiUrl}/educations/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao excluir recurso educacional');
-      }
-
-      loadEducation();
-    } catch (error) {
-      console.error('Erro:', error);
-    }
+    await fetch(`${apiUrl}/educations/${id}`, {
+      method: 'DELETE',
+    });
+    loadEducation();
   }
 }
 

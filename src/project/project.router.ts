@@ -55,20 +55,22 @@ projectRoutes.post(
  *         name: status
  *         required: false
  *         description: Filtrar projetos por status
+ *         schema:
+ *           type: string
  *       - in: query
  *         name: startCreationDate
  *         required: false
  *         description: Data de início do período de filtro de criação do projeto YYYY-MM-DD
  *         schema:
  *           type: string
- *           format: string
+ *           format: date
  *       - in: query
  *         name: endCreationDate
  *         required: false
  *         description: Data de fim do período de filtro de criação do projeto YYYY-MM-DD
  *         schema:
  *           type: string
- *           format: string
+ *           format: date
  *     responses:
  *       200:
  *         description: Lista de projetos retornada com sucesso
@@ -88,7 +90,7 @@ projectRoutes.get(
 
 /**
  * @swagger
- * /projects/id/{id}:
+ * /projects/{id}:
  *   get:
  *     summary: Retorna um projeto pelo ID
  *     tags: [Projects]
@@ -110,7 +112,7 @@ projectRoutes.get(
  *               $ref: '#/components/schemas/ReturnProject'
  */
 projectRoutes.get(
-  "/projects/id/:id",
+  "/projects/:id",
   asyncErrorHandler(async (req: Request, res: Response) => {
     await projectController.findOne(req, res);
   }),
@@ -118,7 +120,7 @@ projectRoutes.get(
 
 /**
  * @swagger
- * /projects/id/{id}:
+ * /projects/{id}:
  *   patch:
  *     summary: Atualiza um projeto existente pelo ID
  *     tags: [Projects]
@@ -136,7 +138,7 @@ projectRoutes.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Project'
+ *             $ref: '#/components/schemas/UpdateProjectDto'
  *     responses:
  *       200:
  *         description: Projeto atualizado com sucesso
@@ -146,4 +148,36 @@ projectRoutes.get(
  *               $ref: '#/components/schemas/ReturnProject'
  */
 projectRoutes.patch(
-  "/
+  "/projects/:id",
+  asyncErrorHandler(async (req: Request, res: Response) => {
+    await projectController.update(req, res);
+  }),
+);
+
+/**
+ * @swagger
+ * /projects/{id}:
+ *   delete:
+ *     summary: Deleta um projeto existente pelo ID
+ *     tags: [Projects]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do projeto a ser deletado
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Projeto deletado com sucesso
+ */
+projectRoutes.delete(
+  "/projects/:id",
+  asyncErrorHandler(async (req: Request, res: Response) => {
+    await projectController.remove(req, res);
+  }),
+);
+
+export { projectRoutes };

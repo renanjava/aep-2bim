@@ -1,2 +1,2 @@
 export * from "./create-partnership.dto";
-export * from "./update-project.dto";
+export * from "./update-partnership.dto";

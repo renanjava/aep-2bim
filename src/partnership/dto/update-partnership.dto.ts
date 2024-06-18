@@ -4,9 +4,9 @@ export interface UpdatePartnershipDto extends Partial<CreatePartnershipDto> { }
 
 export const updatePartnershipDto = {
   projectId: {
-    type: "string",
+    type: "number",
   },
   partnerId: {
-    type: "string",
+    type: "number",
   },
 };

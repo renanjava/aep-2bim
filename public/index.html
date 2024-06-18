@@ -13,6 +13,72 @@
       <button id="filterButton">Filtrar Projetos</button>
     </header>
     <main>
+
+<dialog id="editUserDialog">
+  <form id="editUserForm" onsubmit="updateUser(event)">
+    <input type="hidden" id="editUserId" name="id">
+    <input type="text" name="name" id="editUserName" required placeholder="Novo nome">
+    <input type="email" name="email" id="editUserEmail" required placeholder="Novo email">
+    <div>
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="closeEditUserDialog()">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editProjectDialog">
+  <form id="editProjectForm" onsubmit="updateProject(event)">
+    <input type="hidden" id="editProjectId" name="id">
+    <input type="text" name="title" id="editProjectTitle" required placeholder="Novo título">
+    <textarea name="description" id="editProjectDescription" required placeholder="Nova descrição"></textarea>
+    <input type="text" name="userId" id="editProjectUserId" required placeholder="ID do usuário">
+    <div>
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="closeEditProjectDialog()">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editPartnershipDialog">
+  <form id="editPartnershipForm" onsubmit="updatePartnership(event)">
+    <input type="hidden" id="editPartnershipId" name="id">
+    <input type="text" name="projectId" id="editPartnershipProjectId" required placeholder="ID do projeto">
+    <input type="text" name="partnerId" id="editPartnershipPartnerId" required placeholder="ID do parceiro">
+    <div>
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="closeEditPartnershipDialog()">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editFundingDialog">
+  <form id="editFundingForm" onsubmit="updateFunding(event)">
+    <input type="hidden" id="editFundingId" name="id">
+    <input type="text" name="title" id="editFundingTitle" required placeholder="Novo título">
+    <textarea name="description" id="editFundingDescription" required placeholder="Nova descrição"></textarea>
+    <input type="number" name="amount" id="editFundingAmount" required placeholder="Novo valor">
+    <input type="date" name="deadline" id="editFundingDeadline" required placeholder="Nova data limite">
+    <div>
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="closeEditFundingDialog()">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+
+<dialog id="editEducationDialog">
+  <form id="editEducationForm" onsubmit="updateEducation(event)">
+    <input type="hidden" id="editEducationId" name="id">
+    <input type="text" name="title" id="editEducationTitle" required placeholder="Novo título">
+    <textarea name="description" id="editEducationDescription" required placeholder="Nova descrição"></textarea>
+    <input type="url" name="url" id="editEducationUrl" required placeholder="Novo URL">
+    <div>
+      <button type="submit">Salvar</button>
+      <button type="button" onclick="closeEditEducationDialog()">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
       <section>
         <h2>Usuários</h2>
         <form id="userForm" onsubmit="addUser(event)">

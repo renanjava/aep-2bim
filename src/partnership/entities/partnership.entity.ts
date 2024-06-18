@@ -32,8 +32,8 @@
 
 export interface PartnershipEntity {
   id: string;
-  projectId: string;
-  partnerId: string;
+  projectId: number;
+  partnerId: number;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -19,7 +19,6 @@ export class ProjectService {
     }
 
     const queryRaw: Array<Prisma.ProjectWhereInput> = [];
-    // Adicione filtros específicos conforme necessário
     const query = mergeObjects(queryRaw);
 
     const projects = await this.projectRepository.findAll(query);

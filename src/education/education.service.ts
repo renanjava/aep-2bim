@@ -19,7 +19,6 @@ export class EducationService {
         }
 
         const queryRaw: Array<Prisma.EducationWhereInput> = [];
-        // Adicione filtros específicos conforme necessário
         const query = mergeObjects(queryRaw);
 
         const educations = await this.educationRepository.findAll(query);

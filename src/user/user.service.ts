@@ -19,7 +19,6 @@ export class UserService {
         }
 
         const queryRaw: Array<Prisma.UserWhereInput> = [];
-        // Adicione filtros específicos conforme necessário
         const query = mergeObjects(queryRaw);
 
         const users = await this.userRepository.findAll(query);
