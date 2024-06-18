@@ -1,55 +1,91 @@
-# Task Management App with Express
+Este é uma API construída com Node.js, Typescript, Express, Prisma, Swagger e JWT para gerenciar usuários, projetos, parcerias, financiamentos e recursos educacionais.
 
-Este é um API construída com **Node.js**, **Typescript**, **Express**, **Prisma**, **Swagger** e **JWT** para gerenciamento de tarefas.
+Inicialização
+Configure seu ambiente criando um arquivo .env (você pode copiar o conteúdo de .env.example e colá-lo no novo arquivo).
+Rode o comando npm i.
 
-## Entidades
+Certifique-se de que o Docker está em execução e execute npm run setup no terminal.
+Para iniciar a aplicação, execute npm run start.
 
-### Tarefa
+Para acessar a documentação da API, acesse http://localhost:3000/api.
+Acessar banco de dados
+É possível verificar os dados salvos no banco através do Terminal do container Docker. Acesse o terminal do container "express-todo-list-db-*" e utilize os comandos abaixo:
 
-- Atributos: ID, title, description.
+Rotas
+Usuários (Users)
+POST /users
 
-## Inicialização
+Cria um novo usuário.
+GET /users
 
-1. Configure seu ambiente criando um arquivo `.env` (você pode copiar o conteúdo de `.env.example` e colá-lo no novo arquivo).
-2. Rode o comando `npm i`.
-3. Certifique-se de que o Docker está em execução e execute `npm run setup` no terminal.
-4. Para iniciar a aplicação, execute `npm run start`.
-5. Para acessar a documentação da API, acesse `http://localhost:3000/api`.
+Retorna todos os usuários.
+GET /users/id/
 
-## Acessar banco de dados
+Retorna um usuário por ID.
+PATCH /users/id/
 
-É possível verificar os dados salvos no banco através do Terminal do container docker, basta acessar o terminal do container "express-todo-list-db-*" e rodar os comandos:
+Atualiza um usuário por ID.
+DELETE /users/id/
 
-1. `psql -d taskdb -U admin` para acessar o banco de dados. OBS: devem estar de acordo com o configurado no `.env`
-2. `select * from public."Task";` para acessar os dados salvos no banco Task
+Deleta um usuário por ID.
+Projetos (Projects)
+POST /projects
 
-## Rotas
+Cria um novo projeto.
+GET /projects
 
-### Tarefas (Tasks)
+Retorna todos os projetos.
+GET /projects/id/
 
-- **POST /tasks**
+Retorna um projeto por ID.
+PATCH /projects/id/
 
-  - Cria uma nova tarefa.
+Atualiza um projeto por ID.
+DELETE /projects/id/
 
-- **GET /tasks**
+Deleta um projeto por ID.
+Parcerias (Partnerships)
+POST /partnerships
 
-  - Retorna todas as tarefas.
+Cria uma nova parceria.
+GET /partnerships
 
-- **GET /tasks/longest-description**
+Retorna todas as parcerias.
+GET /partnerships/id/
 
-  - Retorna a tarefa com a maior descrição.
+Retorna uma parceria por ID.
+DELETE /partnerships/id/
 
-- **GET /tasks/average-conclusion**
+Deleta uma parceria por ID.
+Financiamentos (Fundings)
+POST /fundings
 
-  - Retorna a média de conclusão das tarefas.
+Cria um novo financiamento.
+GET /fundings
 
-- **GET /tasks/id**
+Retorna todos os financiamentos.
+GET /fundings/id/
 
-  - Retorna uma tarefa por ID.
+Retorna um financiamento por ID.
+PATCH /fundings/id/
 
-- **PATCH /tasks/id**
+Atualiza um financiamento por ID.
+DELETE /fundings/id/
 
-  - Atualiza uma tarefa por ID.
+Deleta um financiamento por ID.
+Recursos Educacionais (Educations)
+POST /educations
 
-- **DELETE /tasks/id**
-  - Deleta uma tarefa por ID.
+Cria um novo recurso educacional.
+GET /educations
+
+Retorna todos os recursos educacionais.
+GET /educations/id/
+
+Retorna um recurso educacional por ID.
+PATCH /educations/id/
+
+Atualiza um recurso educacional por ID.
+DELETE /educations/id/
+
+Deleta um recurso educacional por ID.
